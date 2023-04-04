@@ -13,6 +13,7 @@ class WebSocketProvider {
     }
 
     private var webSocket: WebSocket? = null
+    private var webSocketContracts: QuoteWebSocketContracts? = null
 
     private val client = OkHttpClient.Builder()
         .readTimeout(30, TimeUnit.SECONDS)
@@ -25,13 +26,18 @@ class WebSocketProvider {
         .build()
 
     fun startWebSocket() {
-
+        webSocketContracts = QuoteWebSocketContractsImpl()
         webSocket = client.newWebSocket(
             Request
                 .Builder()
                 .url(TRADERNET_URL)
                 .build(),
-            WebSocketListener()
+            WebSocketListener(webSocketContracts as QuoteWebSocketContractsImpl)
         )
+    }
+
+    fun closeConnection() {
+        webSocket = null
+        webSocketContracts = null
     }
 }
