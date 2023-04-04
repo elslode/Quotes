@@ -1,19 +1,30 @@
 package com.elsloude.quotes.data
 
+import com.elsloude.quotes.data.network.QuoteWebSocketContractsImpl
+import com.elsloude.quotes.data.network.WebSocketProvider
 import com.elsloude.quotes.domain.QuoteRepository
-import com.elsloude.quotes.domain.model.QuoteResponse
+import com.elsloude.quotes.domain.model.QuoteState
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class QuotesRepositoryImpl: QuoteRepository {
-    override fun getQuotes(): List<QuoteResponse> {
-        TODO("Not yet implemented")
+class QuotesRepositoryImpl : QuoteRepository {
+
+    private val webSocketContract = QuoteWebSocketContractsImpl()
+    private val socket = WebSocketProvider()
+    private val gson = Gson()
+
+    override fun getQuotesFlow(): Flow<QuoteState> {
+        return webSocketContract.quoteStateFlow.map {
+            it.toDomain(gson)
+        }
     }
 
-    override fun openSocketConnection() {
-        TODO("Not yet implemented")
+    override fun openConnectionSocket() {
+        socket.startWebSocket()
     }
 
-    override fun closeSocketConnection() {
-        TODO("Not yet implemented")
+    override fun closeConnectionSocket() {
+        socket.closeConnection()
     }
-
 }

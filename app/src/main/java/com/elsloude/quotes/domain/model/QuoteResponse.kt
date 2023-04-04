@@ -1,10 +1,10 @@
 package com.elsloude.quotes.domain.model
 
 data class QuoteResponse(
-    val name: String,
-    val c: String,
-    val pcp: Double,
-    val ltp: Double,
-    val ltr: String,
-    val chg: Double
+    val companyName: String,
+    val ticker: String,
+    val percentChangeFromPreviousClose: Double,
+    val lastTradePrice: Double,
+    val lastTradeExchange: String,
+    val priceChangeInPoints: Double
 )
