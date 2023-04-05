@@ -3,7 +3,6 @@ package com.elsloude.quotes.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.elsloude.quotes.data.QuotesRepositoryImpl
-import com.elsloude.quotes.domain.model.QuoteState
 import com.elsloude.quotes.domain.usecase.CloseConnectionSocketUseCase
 import com.elsloude.quotes.domain.usecase.GetQuotesUseCase
 import com.elsloude.quotes.domain.usecase.OpenConnectionSocketUseCase
@@ -18,7 +17,6 @@ class MainViewModel : ViewModel() {
 
     fun openConnection() {
         openConnectSocket.invoke()
-        getQuotes()
     }
 
     fun closeConnection() {
@@ -27,12 +25,7 @@ class MainViewModel : ViewModel() {
 
     fun getQuotes() {
         getQuotes.invoke().onEach {
-            when(it) {
-                is QuoteState.Error -> TODO()
-                is QuoteState.QuoteData -> {
-                    Log.d("viewModelTAG", "getQuotes: $it ")
-                }
-            }
+            Log.d("MainViewModel", "getQuotes: $it")
         }
     }
 }
