@@ -1,6 +1,6 @@
 package com.elsloude.quotes.data.network
 
-import android.util.Log
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -8,7 +8,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 class WebSocketProvider(
-    private val webSocketContracts: QuoteWebSocketContracts
+    private val webSocketCallback: QuoteWebSocketCallback,
+    private val gson: Gson
 ) {
 
     companion object {
@@ -33,7 +34,7 @@ class WebSocketProvider(
                 .Builder()
                 .url(TRADERNET_URL)
                 .build(),
-            WebSocketListener(webSocketContracts)
+            WebSocketListener(webSocketCallback, gson)
         )
     }
 

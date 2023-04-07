@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.elsloude.quotes.databinding.FragmentQuotesBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class QuotesFragment : Fragment() {
 
@@ -32,7 +35,10 @@ class QuotesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getQuotes()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.getQuotes()
+        }
     }
 
     override fun onStop() {
