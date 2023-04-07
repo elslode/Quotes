@@ -1,4 +1,4 @@
-package com.elsloude.quotes.domain.model
+package com.elsloude.quotes.domain.entity
 
 data class QuoteResponse(
     val companyName: String,
@@ -6,5 +6,6 @@ data class QuoteResponse(
     val percentChangeFromPreviousClose: Double,
     val lastTradePrice: Double,
     val lastTradeExchange: String,
-    val priceChangeInPoints: Double
+    val priceChangeInPoints: Double,
+    val error: String? = null
 )

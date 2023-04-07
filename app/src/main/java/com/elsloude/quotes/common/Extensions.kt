@@ -1,6 +1,6 @@
 package com.elsloude.quotes.common
 
-import com.elsloude.quotes.data.model.QuotesRequestDto
+import com.elsloude.quotes.data.entity.QuotesRequestDto
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 
