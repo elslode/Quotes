@@ -1,5 +1,6 @@
 package com.elsloude.quotes.data
 
+import android.util.Log
 import com.elsloude.quotes.data.entity.QuoteDto
 import com.elsloude.quotes.data.network.QuoteWebSocketCallback
 import com.elsloude.quotes.data.network.WebSocketProvider
@@ -10,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class QuotesRepositoryImpl : QuoteRepository, QuoteWebSocketCallback {
@@ -19,7 +21,7 @@ class QuotesRepositoryImpl : QuoteRepository, QuoteWebSocketCallback {
 
     private val _quoteFlow = MutableSharedFlow<QuoteResponse>()
     override val flow: SharedFlow<QuoteResponse>
-        get() = _quoteFlow
+        get() = _quoteFlow.asSharedFlow()
 
     override fun openConnectionSocket() {
         socket.startWebSocket()
@@ -30,12 +32,14 @@ class QuotesRepositoryImpl : QuoteRepository, QuoteWebSocketCallback {
     }
 
     override fun onQuoteDataReceived(quoteDataDto: QuoteDto?) {
+        Log.d("onQuoteDataReceived", "onQuoteDataReceived: $quoteDataDto")
         CoroutineScope(Dispatchers.IO).launch {
             _quoteFlow.emit(quoteDataDto.toDomainModel())
         }
     }
 
     override fun onWebSocketError(error: QuoteDto?) {
+        Log.d("onQuoteDataReceived", "onWebSocketError: $error")
         CoroutineScope(Dispatchers.IO).launch {
             _quoteFlow.emit(error.toDomainModel())
         }
