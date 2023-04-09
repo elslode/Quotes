@@ -1,19 +1,16 @@
 package com.elsloude.quotes.presentation
 
-import android.util.Log
 import com.elsloude.quotes.R
 import com.elsloude.quotes.presentation.entity.QuoteUi
-import com.elsloude.quotes.presentation.entity.QuoteView
-import com.elsloude.quotes.presentation.entity.toQuoteView
 
 class ConverterQuoteToList {
 
     fun convert(
         savedMap: MutableMap<String, QuoteUi>,
         currentValue: QuoteUi
-    ): List<QuoteView> {
+    ): List<QuoteUi> {
 
-        val result = mutableListOf<QuoteView>()
+        val result = mutableListOf<QuoteUi>()
 
         if (savedMap[currentValue.ticker] == null && currentValue.ticker?.isNotBlank() == true) {
                 savedMap[currentValue.ticker] = currentValue
@@ -59,8 +56,8 @@ class ConverterQuoteToList {
 
             savedMap[item.key] = cashedValue
 
-            val uiModel = cashedValue.toQuoteView()
-            result.add(uiModel)
+
+            result.add(cashedValue)
         }
 
         return result
