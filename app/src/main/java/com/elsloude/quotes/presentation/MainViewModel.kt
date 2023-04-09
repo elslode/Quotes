@@ -1,6 +1,5 @@
 package com.elsloude.quotes.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elsloude.quotes.common.State

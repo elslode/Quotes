@@ -1,7 +1,6 @@
 package com.elsloude.quotes.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.elsloude.quotes.common.State
 import com.elsloude.quotes.databinding.FragmentQuotesBinding
 import com.elsloude.quotes.presentation.adapter.QuoteAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class QuotesFragment : Fragment() {
@@ -55,7 +51,6 @@ class QuotesFragment : Fragment() {
             viewModel.getQuotes()
 
             viewModel.quotesFlow.collect {
-                Log.d("onViewCreated", "onViewCreated: $it")
                 when (it) {
                     is State.Error -> {
                         binding.progressBar.isVisible = false
@@ -72,8 +67,8 @@ class QuotesFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         viewModel.closeConnection()
     }
 }
