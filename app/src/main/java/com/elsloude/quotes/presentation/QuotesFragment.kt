@@ -5,10 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.elsloude.quotes.common.State
 import com.elsloude.quotes.databinding.FragmentQuotesBinding
+import com.elsloude.quotes.presentation.adapter.QuoteAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -39,19 +42,25 @@ class QuotesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val adapter = QuoteAdapter(requireContext())
+        binding.quotesRv.adapter = adapter
+        binding.quotesRv.itemAnimator = null
+
+        lifecycleScope.launch {
             viewModel.getQuotes()
 
             viewModel.quotesFlow.collect {
-                when(it) {
+                Log.d("onViewCreated", "onViewCreated: $it")
+                when (it) {
                     is State.Error -> {
-
+                        binding.progressBar.isVisible = false
                     }
                     State.Loading -> {
-
+                        binding.progressBar.isVisible = true
                     }
                     is State.Success -> {
-                        Log.d("onViewCreated", "onViewCreated: ${it.data}")
+                        binding.progressBar.isVisible = false
+                        adapter.submitList(it.data)
                     }
                 }
             }
