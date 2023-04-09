@@ -1,12 +1,9 @@
 package com.elsloude.quotes.common
 
-import android.view.View
 import com.elsloude.quotes.data.entity.QuotesRequestDto
 import com.elsloude.quotes.presentation.entity.QuoteUi
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
-import java.math.BigDecimal
-import java.util.Objects
 
 fun QuotesRequestDto.toJsonArray(): JsonArray {
     return JsonArray(

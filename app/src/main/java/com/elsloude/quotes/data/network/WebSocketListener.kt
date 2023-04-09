@@ -1,6 +1,5 @@
 package com.elsloude.quotes.data.network
 
-import android.util.Log
 import com.elsloude.quotes.common.toJsonArray
 import com.elsloude.quotes.data.mapToQuoteResponseDto
 import com.elsloude.quotes.data.entity.QuotesRequestDto
@@ -30,9 +29,7 @@ class WebSocketListener(
         callback.onWebSocketError(responseError)
     }
 
-    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-        Log.d(TAG, "onClosing: $code $reason")
-    }
+    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {}
 
     companion object {
         const val TAG = "websocketlistener"

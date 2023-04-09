@@ -1,6 +1,5 @@
 package com.elsloude.quotes.data
 
-import android.util.Log
 import com.elsloude.quotes.data.entity.QuoteDto
 import com.elsloude.quotes.data.network.QuoteWebSocketCallback
 import com.elsloude.quotes.data.network.WebSocketProvider
@@ -32,14 +31,12 @@ class QuotesRepositoryImpl : QuoteRepository, QuoteWebSocketCallback {
     }
 
     override fun onQuoteDataReceived(quoteDataDto: QuoteDto?) {
-        Log.d("onQuoteDataReceived", "onQuoteDataReceived: $quoteDataDto")
         CoroutineScope(Dispatchers.IO).launch {
             _quoteFlow.emit(quoteDataDto.toDomainModel())
         }
     }
 
     override fun onWebSocketError(error: QuoteDto?) {
-        Log.d("onQuoteDataReceived", "onWebSocketError: $error")
         CoroutineScope(Dispatchers.IO).launch {
             _quoteFlow.emit(error.toDomainModel())
         }
