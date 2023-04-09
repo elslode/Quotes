@@ -1,23 +1,21 @@
 package com.elsloude.quotes.presentation
 
 import com.elsloude.quotes.R
+import com.elsloude.quotes.common.toList
 import com.elsloude.quotes.presentation.entity.QuoteUi
+import java.math.BigDecimal
 
 class ConverterQuoteToList {
 
     fun convert(
-        savedMap: MutableMap<String, QuoteUi>,
-        currentValue: QuoteUi
+        savedMap: HashMap<String, QuoteUi>,
+        currentMap: HashMap<String, QuoteUi>,
     ): List<QuoteUi> {
 
-        val result = mutableListOf<QuoteUi>()
-
-        if (savedMap[currentValue.ticker] == null && currentValue.ticker?.isNotBlank() == true) {
-                savedMap[currentValue.ticker] = currentValue
-        }
-
-        savedMap.map { item ->
-            val savedValue = savedMap[currentValue.ticker]
+        var result = hashMapOf<String, QuoteUi>()
+        currentMap.forEach { item ->
+            val savedValue = savedMap[item.key]
+            val currentValue = item.value
 
             val companyName = currentValue.companyName ?: savedValue?.companyName
             val ticker = currentValue.ticker ?: savedValue?.ticker
@@ -30,16 +28,16 @@ class ConverterQuoteToList {
 
             val backgroundChange = savedValue?.priceChangeInPoints?.let {
                 when {
-                    currentValue.priceChangeInPoints != null && it > currentValue.priceChangeInPoints -> R.color.red
-                    currentValue.priceChangeInPoints != null && it < currentValue.priceChangeInPoints -> R.color.green
+                    currentValue.priceChangeInPoints != null && it > currentValue.priceChangeInPoints -> R.drawable.bg_red
+                    currentValue.priceChangeInPoints != null && it < currentValue.priceChangeInPoints -> R.drawable.bg_green
                     else -> null
                 }
             }
 
             val priceChangeTextColor = when {
                 backgroundChange != null -> R.color.white
-                priceChangeInPoints != null && priceChangeInPoints > 0.0 -> R.color.green
-                priceChangeInPoints != null && priceChangeInPoints < 0.0 -> R.color.green
+                priceChangeInPoints != null && priceChangeInPoints > BigDecimal(0) -> R.color.green
+                priceChangeInPoints != null && priceChangeInPoints < BigDecimal(0) -> R.color.red
                 else -> R.color.black
             }
 
@@ -56,10 +54,9 @@ class ConverterQuoteToList {
 
             savedMap[item.key] = cashedValue
 
-
-            result.add(cashedValue)
+            result = savedMap
         }
 
-        return result
+        return result.toList()
     }
 }
