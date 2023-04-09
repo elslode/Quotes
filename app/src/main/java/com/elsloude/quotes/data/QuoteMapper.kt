@@ -8,12 +8,12 @@ import com.google.gson.JsonParser
 
 fun QuoteDto?.toDomainModel(): QuoteResponse {
     return QuoteResponse(
-        companyName = this?.companyName.orEmpty(),
-        ticker = this?.ticker.orEmpty(),
-        percentChangeFromPreviousClose = this?.percentChangeFromPreviousClose ?: 0.0,
-        lastTradePrice = this?.lastTradePrice ?: 0.0,
-        lastTradeExchange = this?.lastTradeExchange.orEmpty(),
-        priceChangeInPoints = this?.priceChangeInPoints ?: 0.0
+        companyName = this?.companyName,
+        ticker = this?.ticker,
+        percentChangeFromPreviousClose = this?.percentChangeFromPreviousClose,
+        lastTradePrice = this?.lastTradePrice,
+        lastTradeExchange = this?.lastTradeExchange,
+        priceChangeInPoints = this?.priceChangeInPoints
     )
 }
 

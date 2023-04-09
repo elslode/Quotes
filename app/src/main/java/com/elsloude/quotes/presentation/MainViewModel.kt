@@ -1,5 +1,6 @@
 package com.elsloude.quotes.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elsloude.quotes.common.State
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -22,6 +24,7 @@ class MainViewModel : ViewModel() {
     private val getQuotes = GetQuotesUseCase(repository)
 
     private val savedValues = hashMapOf<String, QuoteUi>()
+    private val currentValues = hashMapOf<String, QuoteUi>()
 
     private val _quotesFlow: MutableStateFlow<State<List<QuoteUi>>> =
         MutableStateFlow(State.Loading)
@@ -39,10 +42,18 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             getQuotes.invoke()
                 .map { quote ->
+                    quote.let { uiModel ->
+                        uiModel.ticker?.let {
+                            currentValues[it] = uiModel
+                        }
+                    }
                     ConverterQuoteToList().convert(
                         savedMap = savedValues,
-                        currentValue = quote
+                        currentMap = currentValues
                     )
+                }
+                .onEach {
+
                 }
                 .collect {
                     val result = State.Success(it)
