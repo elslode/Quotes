@@ -19,10 +19,10 @@ fun QuoteResponse.toUiModel(): QuoteUi =
     QuoteUi(
         companyName = this.companyName,
         ticker = this.ticker,
-        percentChangeFromPreviousClose = this.percentChangeFromPreviousClose ?: 0.0,
-        lastTradePrice = this.lastTradePrice ?: 0.0,
+        percentChangeFromPreviousClose = this.percentChangeFromPreviousClose,
+        lastTradePrice = this.lastTradePrice,
         lastTradeExchange = this.lastTradeExchange,
-        priceChangeInPoints = this.priceChangeInPoints?.toBigDecimal() ?: BigDecimal(0),
+        priceChangeInPoints = this.priceChangeInPoints?.toBigDecimal(),
         error = this.error
     )
 
