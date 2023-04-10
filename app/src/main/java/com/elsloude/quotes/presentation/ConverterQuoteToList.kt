@@ -20,11 +20,11 @@ class ConverterQuoteToList {
             val companyName = currentValue.companyName ?: savedValue?.companyName
             val ticker = currentValue.ticker ?: savedValue?.ticker
             val prevClosePctChange = currentValue.percentChangeFromPreviousClose
-                ?: savedValue?.percentChangeFromPreviousClose
-            val lastTradePrice = currentValue.lastTradePrice ?: savedValue?.lastTradePrice
+                ?: savedValue?.percentChangeFromPreviousClose ?: 0.0
+            val lastTradePrice = currentValue.lastTradePrice ?: savedValue?.lastTradePrice  ?: 0.0
             val lastTradeExchange = currentValue.lastTradeExchange ?: savedValue?.lastTradeExchange
             val priceChangeInPoints =
-                currentValue.priceChangeInPoints ?: savedValue?.priceChangeInPoints
+                currentValue.priceChangeInPoints ?: savedValue?.priceChangeInPoints ?: BigDecimal(0)
 
             val backgroundChange = savedValue?.priceChangeInPoints?.let {
                 when {

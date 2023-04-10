@@ -1,5 +1,6 @@
 package com.elsloude.quotes.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.elsloude.quotes.App
 import com.elsloude.quotes.common.State
 import com.elsloude.quotes.databinding.FragmentQuotesBinding
+import com.elsloude.quotes.di.ViewModelFactory
 import com.elsloude.quotes.presentation.adapter.QuoteAdapter
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class QuotesFragment : Fragment() {
 
@@ -21,20 +25,26 @@ class QuotesFragment : Fragment() {
     private val binding: FragmentQuotesBinding
         get() = _binding ?: throw RuntimeException("FragmentQuotesBinding is null")
 
-    private lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private lateinit var viewModel: QuotesViewModel
+
+    private val component by lazy {
+        (requireActivity().application as App).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentQuotesBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[QuotesViewModel::class.java]
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.openConnection()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,8 +58,6 @@ class QuotesFragment : Fragment() {
         binding.quotesRv.animation = null
 
         lifecycleScope.launch {
-            viewModel.getQuotes()
-
             viewModel.quotesFlow.collect {
                 when (it) {
                     is State.Error -> {
