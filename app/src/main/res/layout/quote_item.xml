@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ticket_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:theme="@style/Theme.Quotes.TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="EXPN.EU"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/trader_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:theme="@style/Theme.Quotes.TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ticket_tv"
+        tools:text="MCX | Газпром (ПАО) ао"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/quote_change_price_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="+3.15%"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginEnd="8dp"
+        android:padding="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/detail_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/detail_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/arrow_right_ic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/last_price_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:theme="@style/Theme.Quotes.TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/detail_btn"
+        tools:text="201.73 ( +1.73)" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

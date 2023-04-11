@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Quotes</string>
+
+    <string name="company_trade_name">%s | %s</string>
+    <string name="price_change">%s%%</string>
+    <string name="price_quote">%s ( %s )</string>
 </resources>

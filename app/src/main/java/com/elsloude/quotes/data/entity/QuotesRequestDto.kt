@@ -1,4 +1,4 @@
-package com.elsloude.quotes.data.model
+package com.elsloude.quotes.data.entity
 
 import kotlinx.serialization.Serializable
 

@@ -1,14 +1,12 @@
 package com.elsloude.quotes.data.network
 
-import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
-import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class WebSocketProvider(
-    private val webSocketContracts: QuoteWebSocketContracts
+class WebSocketProvider @Inject constructor(
+    private val client: OkHttpClient
 ) {
 
     companion object {
@@ -17,23 +15,13 @@ class WebSocketProvider(
 
     private var webSocket: WebSocket? = null
 
-    private val client = OkHttpClient.Builder()
-        .readTimeout(30, TimeUnit.SECONDS)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        })
-        .hostnameVerifier { _, _ -> true }
-        .retryOnConnectionFailure(true)
-        .build()
-
-    fun startWebSocket() {
+    fun startWebSocket(webSocketListener: WebSocketListener) {
         webSocket = client.newWebSocket(
             Request
                 .Builder()
                 .url(TRADERNET_URL)
                 .build(),
-            WebSocketListener(webSocketContracts)
+            webSocketListener
         )
     }
 
