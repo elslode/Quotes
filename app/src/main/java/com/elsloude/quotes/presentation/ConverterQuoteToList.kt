@@ -21,7 +21,7 @@ class ConverterQuoteToList {
             val ticker = currentValue.ticker ?: savedValue?.ticker
             val prevClosePctChange = currentValue.percentChangeFromPreviousClose
                 ?: savedValue?.percentChangeFromPreviousClose ?: 0.0
-            val lastTradePrice = currentValue.lastTradePrice ?: savedValue?.lastTradePrice  ?: 0.0
+            val lastTradePrice = currentValue.lastTradePrice ?: savedValue?.lastTradePrice ?: 0.0
             val lastTradeExchange = currentValue.lastTradeExchange ?: savedValue?.lastTradeExchange
             val priceChangeInPoints =
                 currentValue.priceChangeInPoints ?: savedValue?.priceChangeInPoints ?: BigDecimal(0)
@@ -36,8 +36,8 @@ class ConverterQuoteToList {
 
             val priceChangeTextColor = when {
                 backgroundChange != null -> R.color.white
-                priceChangeInPoints != null && priceChangeInPoints > BigDecimal(0) -> R.color.green
-                priceChangeInPoints != null && priceChangeInPoints < BigDecimal(0) -> R.color.red
+                priceChangeInPoints > BigDecimal(0) -> R.color.green
+                priceChangeInPoints < BigDecimal(0) -> R.color.red
                 else -> R.color.black
             }
 

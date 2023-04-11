@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,8 +20,7 @@ class QuotesRepositoryImpl @Inject constructor(
 ) : QuotesRepository, QuoteWebSocketCallback {
 
     private val _quoteFlow = MutableSharedFlow<QuoteResponse>()
-    override val flow: SharedFlow<QuoteResponse>
-        get() = _quoteFlow.asSharedFlow()
+    override val quotesFlow: SharedFlow<QuoteResponse> get() = _quoteFlow
 
     override fun openConnectionSocket() {
         val webSocketListener = WebSocketListener(this, gson)

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.SharedFlow
 
 interface QuotesRepository {
 
-    val flow: SharedFlow<QuoteResponse>
+    val quotesFlow: SharedFlow<QuoteResponse>
     fun openConnectionSocket()
     fun closeConnectionSocket()
 }

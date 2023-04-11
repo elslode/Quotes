@@ -74,9 +74,4 @@ class QuotesFragment : Fragment() {
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.closeConnection()
-    }
 }
