@@ -2,16 +2,22 @@ package com.elsloude.quotes.presentation.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.elsloude.quotes.R
-import com.elsloude.quotes.common.isNull
 import com.elsloude.quotes.databinding.QuoteItemBinding
 import com.elsloude.quotes.presentation.entity.QuoteUi
 
 class QuoteAdapter(private val context: Context) :
     ListAdapter<QuoteUi, QuoteViewHolder>(QuoteDiffCallback) {
+
+    private val defaultBack = R.color.white
+    private val defaultText = R.color.black
+
+    private fun setTextColor(color: Int?): Int {
+        return context.getColor(color ?: defaultText)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
         val binding = QuoteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QuoteViewHolder(binding)
@@ -26,9 +32,6 @@ class QuoteAdapter(private val context: Context) :
                 val changePricePercent = context.resources.getString(R.string.price_change)
                 val priceQuote = context.resources.getString(R.string.price_quote)
 
-                val defaultBack = R.color.white
-                val defaultText = R.color.black
-
                 ticketTv.text = ticker
                 traderNameTv.text = String.format(traderName, lastTradeExchange, companyName)
                 lastPriceTv.text = String.format(
@@ -40,7 +43,7 @@ class QuoteAdapter(private val context: Context) :
                 quoteChangePriceTv.apply {
                     text = String.format(changePricePercent, priceChangeInPoints)
                     setBackgroundResource(colorChangesBackground ?: defaultBack)
-                    setTextColor(context.getColor(changePriceColor ?: defaultText))
+                    setTextColor(setTextColor(changePriceColor))
                 }
             }
         }

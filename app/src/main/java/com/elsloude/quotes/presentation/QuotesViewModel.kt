@@ -7,52 +7,51 @@ import com.elsloude.quotes.domain.usecase.CloseConnectionSocketUseCase
 import com.elsloude.quotes.domain.usecase.GetQuotesUseCase
 import com.elsloude.quotes.domain.usecase.OpenConnectionSocketUseCase
 import com.elsloude.quotes.presentation.entity.QuoteUi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import com.elsloude.quotes.presentation.entity.toUiModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class QuotesViewModel @Inject constructor(
     private val getQuotes: GetQuotesUseCase,
     private val openConnectSocket: OpenConnectionSocketUseCase,
-    private val closeConnectSocket: CloseConnectionSocketUseCase
+    private val closeConnectSocket: CloseConnectionSocketUseCase,
+    private val mapper: ConverterQuoteToList
 ) : ViewModel() {
 
     private val savedValues = hashMapOf<String, QuoteUi>()
     private val currentValues = hashMapOf<String, QuoteUi>()
 
-    private val _quotesFlow: MutableStateFlow<State<List<QuoteUi>>> =
-        MutableStateFlow(State.Loading)
-    val quotesFlow: StateFlow<State<List<QuoteUi>>> = _quotesFlow
-
-    fun closeConnection() {
-        closeConnectSocket.invoke()
-    }
-
-    private fun getQuotes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getQuotes.invoke()
-                .map { quote ->
-                    quote.let { uiModel ->
-                        uiModel.ticker?.let {
-                            currentValues[it] = uiModel
-                        }
-                    }
-                    ConverterQuoteToList().convert(
-                        savedMap = savedValues,
-                        currentMap = currentValues
-                    )
+    private val _quotesFlow = getQuotes.invoke()
+        .map { quote ->
+            quote.toUiModel().let { uiModel ->
+                uiModel.ticker?.let {
+                    currentValues[it] = uiModel
                 }
-                .onEach {
-                    val result = State.Success(it)
-                    _quotesFlow.emit(result)
-                }
-                .collect()
+            }
+            ConverterQuoteToList().convert(
+                savedMap = savedValues,
+                currentMap = currentValues
+            )
         }
-    }
+        .map {
+            State.Success(it)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = State.Loading
+        )
+    val quotesFlow: StateFlow<State<List<QuoteUi>>> = this._quotesFlow
 
     init {
-        getQuotes()
         openConnectSocket.invoke()
+        getQuotes()
+    }
+
+    override fun onCleared() {
+        closeConnectSocket.invoke()
     }
 }
